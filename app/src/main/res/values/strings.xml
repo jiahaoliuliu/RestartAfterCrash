@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RestartAfterCrashing</string>
+    <string name="crash">Crash!</string>
 </resources>

@@ -2,12 +2,24 @@ package com.jiahaoliuliu.restartaftercrashing;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+
+    private String crashThisApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    /**
+     * Method used to crash the app
+     * @param view
+     */
+    public void crash(View view) {
+        // Launch null pointer exception
+        crashThisApp.charAt(0);
     }
 }
