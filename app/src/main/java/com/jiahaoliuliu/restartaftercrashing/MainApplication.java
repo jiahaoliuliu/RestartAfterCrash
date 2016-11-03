@@ -9,9 +9,11 @@ import java.io.StringWriter;
 import android.os.Process;
 
 /**
+ * Example from StackOverFlow
+ * http://stackoverflow.com/questions/12560590/android-app-restarts-upon-crash-force-close
+ * http://stackoverflow.com/questions/2681499/android-how-to-auto-restart-application-after-its-been-force-closed
  * Created by jiahao on 03/11/16.
  */
-
 public class MainApplication extends Application {
 
     public static final String INTENT_KEY_UNCAUGHT_EXCEPTION = "UncaughtException";
@@ -46,6 +48,7 @@ public class MainApplication extends Application {
             //you can use this String to know what caused the exception and in which Activity
             intent.putExtra(INTENT_KEY_UNCAUGHT_EXCEPTION,
                     "Exception is: " + stackTrace.toString());
+            intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK );
             intent.putExtra(INTENT_KEY_STACK_TRACE, s);
             myContext.startActivity(intent);
             //for restarting the Activity
