@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import android.os.Process;
@@ -30,11 +32,15 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         // Init the variables
         mContext = this;
 
         // Save the default uncaught exception handler for Crashlytics
+        // This won't avoid the system info screen to appear. Sometimes it says
+        // stops the app and sometimes it says restart the app. This option will
+        // affect the correct start of the app.
         mDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
 
         Thread.setDefaultUncaughtExceptionHandler(mCaughtExceptionHandler);
