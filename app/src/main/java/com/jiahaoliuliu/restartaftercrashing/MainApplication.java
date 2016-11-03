@@ -1,6 +1,8 @@
 package com.jiahaoliuliu.restartaftercrashing;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
@@ -45,10 +47,12 @@ public class MainApplication extends Application {
                     "Exception is: " + stackTrace.toString());
             intent.addFlags( Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK );
             intent.putExtra(INTENT_KEY_STACK_TRACE, s);
-            mContext.startActivity(intent);
-            //for restarting the Activity
-            Process.killProcess(Process.myPid());
-            System.exit(0);
+
+            // Start the activity after 2 seconds
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 2000, pendingIntent);
+            System.exit(2);
         }
     };
 }
