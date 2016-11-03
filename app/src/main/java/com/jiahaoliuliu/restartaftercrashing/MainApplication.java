@@ -21,7 +21,11 @@ public class MainApplication extends Application {
     public static final String INTENT_KEY_UNCAUGHT_EXCEPTION = "UncaughtException";
     public static final String INTENT_KEY_STACK_TRACE = "StackTrace";
 
+    private static final long WAITING_TIME = 2000; // 2seconds
+
     private Context mContext;
+
+    private Thread.UncaughtExceptionHandler mDefaultUEH;
 
     @Override
     public void onCreate() {
@@ -29,6 +33,9 @@ public class MainApplication extends Application {
 
         // Init the variables
         mContext = this;
+
+        // Save the default uncaught exception handler for Crashlytics
+        mDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
 
         Thread.setDefaultUncaughtExceptionHandler(mCaughtExceptionHandler);
     }
@@ -51,8 +58,10 @@ public class MainApplication extends Application {
             // Start the activity after 2 seconds
             PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 2000, pendingIntent);
-            System.exit(2);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + WAITING_TIME, pendingIntent);
+
+            // This will make Crashlytics do its job
+            mDefaultUEH.uncaughtException(thread, exception);
         }
     };
 }
